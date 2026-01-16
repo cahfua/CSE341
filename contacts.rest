@@ -1,0 +1,11 @@
+### Get all contacts
+GET http://localhost:8080/contacts
+
+### Get single contact (Celestine)
+GET http://localhost:8080/contacts/6969b26abc84506eecc391d7
+
+### Get single contact (John Mani)
+GET http://localhost:8080/contacts/6969b278bc84506eecc391d9
+
+### Get single contact (Myma Tafili)
+GET http://localhost:8080/contacts/6969b281bc84506eecc391db
