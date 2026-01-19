@@ -1,0 +1,150 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Contacts API",
+    "version": "1.0.0",
+    "description": "API for storing and retrieving contacts in MongoDB."
+  },
+  "servers": [
+    {
+      "url": "https://cse341-kqec.onrender.com",
+      "description": "Production (Render)"
+    }
+  ],
+  "paths": {
+    "/contacts": {
+      "get": {
+        "summary": "Get all contacts",
+        "responses": {
+          "200": {
+            "description": "Returns an array of contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Contact" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new contact",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ContactInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created. Returns new contact id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Missing required fields" }
+        }
+      }
+    },
+    "/contacts/{id}": {
+      "get": {
+        "summary": "Get a contact by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns one contact",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Contact" }
+              }
+            }
+          },
+          "404": { "description": "Contact not found" }
+        }
+      },
+      "put": {
+        "summary": "Update a contact by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ContactInput" }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "Updated successfully" },
+          "400": { "description": "Missing required fields / invalid id" },
+          "404": { "description": "Contact not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a contact by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Deleted successfully" },
+          "404": { "description": "Contact not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "favoriteColor": { "type": "string" },
+          "birthday": { "type": "string" }
+        }
+      },
+      "ContactInput": {
+        "type": "object",
+        "required": ["firstName", "lastName", "email", "favoriteColor", "birthday"],
+        "properties": {
+          "firstName": { "type": "string", "example": "Celestine" },
+          "lastName": { "type": "string", "example": "Ahfua" },
+          "email": { "type": "string", "example": "celestine@example.com" },
+          "favoriteColor": { "type": "string", "example": "Purple" },
+          "birthday": { "type": "string", "example": "2003-01-01" }
+        }
+      }
+    }
+  }
+}

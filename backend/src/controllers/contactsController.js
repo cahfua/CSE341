@@ -1,17 +1,16 @@
 const { ObjectId } = require("mongodb");
-const { getContactsCollection } = require("../models/contactModel");
+const contactModel = require("../models/contactModel");
 
-async function getAllContacts(req, res) {
+const getAllContacts = async (req, res) => {
   try {
-    const contactsCol = await getContactsCollection();
-    const contacts = await contactsCol.find().toArray();
+    const contacts = await contactModel.getAll();
     res.status(200).json(contacts);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
 
-async function getSingleContact(req, res) {
+const getSingleContact = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -19,8 +18,7 @@ async function getSingleContact(req, res) {
       return res.status(400).json({ error: "Invalid contact id" });
     }
 
-    const contactsCol = await getContactsCollection();
-    const contact = await contactsCol.findOne({ _id: new ObjectId(id) });
+    const contact = await contactModel.getById(id);
 
     if (!contact) {
       return res.status(404).json({ error: "Contact not found" });
@@ -30,6 +28,90 @@ async function getSingleContact(req, res) {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
 
-module.exports = { getAllContacts, getSingleContact };
+// PART 2: POST
+const createContact = async (req, res) => {
+  try {
+    const { firstName, lastName, email, favoriteColor, birthday } = req.body;
+
+    if (!firstName || !lastName || !email || !favoriteColor || !birthday) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const newId = await contactModel.create({
+      firstName,
+      lastName,
+      email,
+      favoriteColor,
+      birthday
+    });
+
+    res.status(201).json({ id: newId });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// PART 2: PUT
+const updateContact = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid contact id" });
+    }
+
+    const { firstName, lastName, email, favoriteColor, birthday } = req.body;
+
+    // all fields required (rubric)
+    if (!firstName || !lastName || !email || !favoriteColor || !birthday) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const updated = await contactModel.update(id, {
+      firstName,
+      lastName,
+      email,
+      favoriteColor,
+      birthday
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: "Contact not found" });
+    }
+
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// PART 2: DELETE
+const deleteContact = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid contact id" });
+    }
+
+    const deleted = await contactModel.remove(id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Contact not found" });
+    }
+
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = {
+  getAllContacts,
+  getSingleContact,
+  createContact,
+  updateContact,
+  deleteContact
+};

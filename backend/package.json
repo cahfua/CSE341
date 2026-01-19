@@ -7,7 +7,6 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cahfua/CSE341.git"
@@ -22,7 +21,8 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "mongodb": "^7.0.0"
+    "mongodb": "^7.0.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
