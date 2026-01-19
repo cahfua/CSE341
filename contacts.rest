@@ -2,31 +2,90 @@
 # LOCAL TESTING
 ############################################
 
-### Get all contacts
+### GET all contacts (LOCAL)
 GET http://localhost:8080/contacts
 
-### Get single contact (Celestine)
+
+### GET single contact (Celestine)
 GET http://localhost:8080/contacts/6969b26abc84506eecc391d7
 
-### Get single contact (John Mani)
-GET http://localhost:8080/contacts/6969b278bc84506eecc391d9
 
-### Get single contact (Myma Tafili)
-GET http://localhost:8080/contacts/6969b281bc84506eecc391db
+### GET single contact (Sione)
+GET http://localhost:8080/contacts/696c9cfa44143ad4e0240144
+
+
+### POST create new contact (LOCAL)
+POST http://localhost:8080/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Kelepi",
+  "lastName": "Mahe",
+  "email": "kelepi.mahe@example.com",
+  "favoriteColor": "Black",
+  "birthday": "1995-06-22"
+}
+
+
+### PUT update contact (Leilani – change favoriteColor)
+PUT http://localhost:8080/contacts/696c9d0c44143ad4e0240146
+Content-Type: application/json
+
+{
+  "firstName": "Leilani",
+  "lastName": "Tupou",
+  "email": "leilani.tupou@example.com",
+  "favoriteColor": "Purple",
+  "birthday": "1999-09-02"
+}
+
+
+### DELETE contact (Manu)
+DELETE http://localhost:8080/contacts/696c9d2544143ad4e0240148
+
 
 
 ############################################
 # RENDER (DEPLOYED)
 ############################################
 
-### Get all contacts
+### GET all contacts (RENDER)
 GET https://cse341-kqec.onrender.com/contacts
 
-### Get single contact (Celestine)
+
+### GET single contact (Celestine)
 GET https://cse341-kqec.onrender.com/contacts/6969b26abc84506eecc391d7
 
-### Get single contact (John Mani)
-GET https://cse341-kqec.onrender.com/contacts/6969b278bc84506eecc391d9
 
-### Get single contact (Myma Tafili)
-GET https://cse341-kqec.onrender.com/contacts/6969b281bc84506eecc391db
+### GET single contact (Sione)
+GET https://cse341-kqec.onrender.com/contacts/696c9cfa44143ad4e0240144
+
+
+### POST create new contact (RENDER)
+POST https://cse341-kqec.onrender.com/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Noah",
+  "lastName": "Fifita",
+  "email": "noah.fifita@example.com",
+  "favoriteColor": "Blue",
+  "birthday": "1998-03-15"
+}
+
+
+### PUT update contact (John – change email)
+PUT https://cse341-kqec.onrender.com/contacts/6969b278bc84506eecc391d9
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Mani",
+  "email": "john.mani@updatedexample.com",
+  "favoriteColor": "Blue",
+  "birthday": "1999-05-12"
+}
+
+
+### DELETE contact (Myma)
+DELETE https://cse341-kqec.onrender.com/contacts/6969b281bc84506eecc391db
