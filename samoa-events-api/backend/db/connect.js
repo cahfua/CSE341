@@ -3,27 +3,21 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-let db;
+const uri = process.env.MONGODB_URI;
+if (!uri) {
+  throw new Error("MONGODB_URI is missing. Check Render Environment Variables.");
+}
 
-export const connectDb = async () => {
-  if (db) return db;
+const client = new MongoClient(uri);
 
-  const uri = process.env.MONGODB_URI;
-  const dbName = process.env.DB_NAME;
+// ✅ keep DEFAULT export for your existing code (events.js)
+export default client;
 
-  if (!uri) throw new Error("MONGODB_URI is missing");
-  if (!dbName) throw new Error("DB_NAME is missing");
-
-  const client = new MongoClient(uri);
-  await client.connect();
-
-  db = client.db(dbName);
-  console.log(`✅ Connected to MongoDB database: ${dbName}`);
-
-  return db;
-};
-
+// ✅ helper to get the database
 export const getDb = () => {
-  if (!db) throw new Error("DB not initialized. Call connectDb() first.");
-  return db;
+  const dbName = process.env.DB_NAME;
+  if (!dbName) {
+    throw new Error("DB_NAME is missing. Check Render Environment Variables.");
+  }
+  return client.db(dbName);
 };
