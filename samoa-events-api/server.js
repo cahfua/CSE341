@@ -14,3 +14,6 @@ app.get("/rsvps", (req, res) => res.status(200).json([]));
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Server running on port ${port}`));
+
+import rsvpRoutes from "./backend/routes/rsvps.js";
+app.use("/rsvps", rsvpRoutes);

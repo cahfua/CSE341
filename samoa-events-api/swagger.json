@@ -24,8 +24,100 @@
             "description": "Returns all events"
           }
         }
+      },
+      "post": {
+        "summary": "Create a new event",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "location", "eventDate"],
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "location": { "type": "string" },
+                  "village": { "type": "string" },
+                  "island": { "type": "string" },
+                  "eventDate": { "type": "string", "format": "date" },
+                  "startTime": { "type": "string" },
+                  "endTime": { "type": "string" },
+                  "organizerName": { "type": "string" },
+                  "contactPhone": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Event created"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
       }
     },
+
+    "/events/{id}": {
+      "get": {
+        "summary": "Get event by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Event found" },
+          "404": { "description": "Event not found" }
+        }
+      },
+      "put": {
+        "summary": "Update an event",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "Event updated" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "Event not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete an event",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Event deleted" },
+          "404": { "description": "Event not found" }
+        }
+      }
+    },
+
     "/rsvps": {
       "get": {
         "summary": "Get all RSVPs",
@@ -33,6 +125,89 @@
           "200": {
             "description": "Returns all RSVPs"
           }
+        }
+      },
+      "post": {
+        "summary": "Create a new RSVP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["eventId", "firstName", "lastName", "phone", "partySize"],
+                "properties": {
+                  "eventId": { "type": "string" },
+                  "firstName": { "type": "string" },
+                  "lastName": { "type": "string" },
+                  "phone": { "type": "string" },
+                  "partySize": { "type": "integer" },
+                  "notes": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "RSVP created" },
+          "400": { "description": "Invalid input" }
+        }
+      }
+    },
+
+    "/rsvps/{id}": {
+      "get": {
+        "summary": "Get RSVP by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "RSVP found" },
+          "404": { "description": "RSVP not found" }
+        }
+      },
+      "put": {
+        "summary": "Update an RSVP",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "RSVP updated" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "RSVP not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete an RSVP",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "RSVP deleted" },
+          "404": { "description": "RSVP not found" }
         }
       }
     }
