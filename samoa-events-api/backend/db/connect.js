@@ -5,24 +5,25 @@ dotenv.config();
 
 const uri = process.env.MONGODB_URI;
 if (!uri) {
-  throw new Error("MONGODB_URI is missing. Check Render Environment Variables.");
+  throw new Error("MONGODB_URI is missing. Check environment variables.");
 }
 
 const client = new MongoClient(uri);
-let connected = false;
 
-export default client;
+let db;
 
-export const connectDb = async () => {
-  if (connected) return;
+export async function connectDb() {
+  if (db) return db;
+
   await client.connect();
-  connected = true;
-};
+  db = client.db(process.env.DB_NAME);
+  console.log("✅ Connected to MongoDB");
+  return db;
+}
 
-export const getDb = () => {
-  const dbName = process.env.DB_NAME;
-  if (!dbName) {
-    throw new Error("DB_NAME is missing. Check Render Environment Variables.");
+export function getDb() {
+  if (!db) {
+    throw new Error("Database not initialized. Call connectDb first.");
   }
-  return client.db(dbName);
-};
+  return db;
+}
