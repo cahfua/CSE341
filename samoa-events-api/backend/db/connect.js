@@ -9,11 +9,16 @@ if (!uri) {
 }
 
 const client = new MongoClient(uri);
+let connected = false;
 
-// ✅ keep DEFAULT export for your existing code (events.js)
 export default client;
 
-// ✅ helper to get the database
+export const connectDb = async () => {
+  if (connected) return;
+  await client.connect();
+  connected = true;
+};
+
 export const getDb = () => {
   const dbName = process.env.DB_NAME;
   if (!dbName) {
