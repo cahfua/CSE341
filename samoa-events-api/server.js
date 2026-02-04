@@ -15,36 +15,40 @@ import rsvpRoutes from "./backend/routes/rsvps.js";
 import authRoutes from "./backend/routes/auth.js";
 
 const app = express();
+
+app.set("trust proxy", 1);
+
 app.use(express.json());
 
-// sessions (cookie-based auth)
+const isProd = process.env.BASE_URL?.startsWith("https://");
+
 app.use(
   session({
+    name: "samoa-events-session",
     secret: process.env.SESSION_SECRET || "dev-secret",
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       httpOnly: true,
-      secure: process.env.BASE_URL?.startsWith("https://") || false
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax"
     }
   })
 );
 
-// passport config + middleware
 configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-// home
-app.get("/", (req, res) => res.send("Samoa Events API is running"));
+app.get("/", (req, res) => {
+  res.send("Samoa Events API is running");
+});
 
-// swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// auth routes
 app.use("/auth", authRoutes);
 
-// API routes
 app.use("/events", eventRoutes);
 app.use("/rsvps", rsvpRoutes);
 
@@ -52,7 +56,9 @@ const port = process.env.PORT || 8080;
 
 connectDb()
   .then(() => {
-    app.listen(port, () => console.log(`Server running on port ${port}`));
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
   })
   .catch((err) => {
     console.error("DB connection failed:", err);
